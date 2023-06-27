@@ -1,4 +1,4 @@
-from netclassandtrain import VAE
+from netclasses import VAE
 import cv2
 import matplotlib.pyplot as plt
 import torch

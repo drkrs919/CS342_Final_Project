@@ -57,7 +57,9 @@ class VAEConv(nn.Module):
         # Encoding
         self.encode1  = nn.Conv2d(in_channels = 3, out_channels = 4, kernel_size = (32,32))
         self.encode2 = nn.MaxPool2d(kernel_size = (2,2), stride = 1)
-        self.encode3  = nn.Linear(876096, hidden_nodes)                  
+        self.encode3  = nn.Linear(876096, hidden_nodes)
+
+        # Variational Part                  
         self.encode_mu = torch.nn.Linear(hidden_nodes, latent_dims)
         self.encode_sigma = torch.nn.Linear(hidden_nodes, latent_dims)
 
@@ -80,9 +82,12 @@ class VAEConv(nn.Module):
         x = relu(self.encode3(x))
         # Variational part of VAE
         mu = self.encode_mu(x)
-        sigma = torch.exp(self.encode_sigma(x))
-        z = mu + sigma * self.N.sample(mu.shape)
-        self.kl = (sigma**2 + mu**2 - torch.log(torch.abs(sigma) + 1e-10) - 1/2).sum()
+        sigma_squared = torch.pow(self.encode_sigma(x), 2)
+        z = mu + sigma_squared * self.N.sample(mu.shape)
+        # self.kl = (sigma**2 + mu**2 - torch.log(torch.abs(sigma) + 1e-10) - 1/2).sum() # old formulation
+        self.kl = 0.5 * (torch.pow(mu, 2) + sigma_squared - torch.log(sigma_squared) - 1).sum()
+        nankl = torch.isnan(self.kl).item()
+        assert(not nankl)
 
         #Decoding
         z = self.decode1(z)
