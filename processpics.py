@@ -1,7 +1,10 @@
 import cv2
+from PIL import Image
+
 
 # Define the desired dimensions for the cropped and resized images
 crop_size = (500, 500)
+image_size = crop_size[0] * crop_size[1] * 3
 
 def crop_profs(gray = False):
     for i in range(1, 99):
