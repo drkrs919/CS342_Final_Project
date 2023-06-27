@@ -26,14 +26,14 @@ def compare_outputs(model, pretrain = True, gray = False):
     image_path = None
     if pretrain:
         i = np.random.choice(13234)
-        image_path = f'./cropped_lfw/ColoredFaces/image_{i}.jpg'
+        image_path = f'./lfwdatacolor/Faces/image_{i}.jpg'
         if gray:
-            image_path = f'./cropped_lfw/Faces/image_{i}.jpg'
+            image_path = f'./lfwdatagray/Faces/image_{i}.jpg'
     else:
         i = np.random.choice(97)
-        image_path = f'./cropped_CS_prof_images/ColoredFaces/resized_image_{i}.jpg'
+        image_path = f'./profdatacolor/Faces/image_{i}.jpg'
         if gray:
-            image_path = f'./cropped_CS_prof_images/ColoredFaces/resized_image_{i}.jpg'
+            image_path = f'./profdatagray/Faces/image_{i}.jpg'
     imgnp = cv2.imread(image_path)
     imgnp = cv2.cvtColor(imgnp, cv2.COLOR_BGR2RGB)
     img = torch.reshape(torch.tensor(imgnp, dtype = torch.float32), (1, -1, crop_size[0], crop_size[1]))
