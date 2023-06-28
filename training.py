@@ -1,14 +1,15 @@
 import torch
+import math
 from tqdm.notebook import tqdm
 
 # Doing in-place allows easier saving via pickle
-def train_vae(model, dataloader, nepochs=100, inter_epoch  = True, regularize = False):
+def train_vae(model, dataloader, nepochs=100, lr = 1e-3, scale_KL  = True, regularize = False):
     model.train()
     optimizer = None
     if regularize:
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay = 1e-2)
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay = 1e-2)
     else:
-        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     try:
         progress = tqdm(range(nepochs), position = 0, unit = "epoch")
         for epoch in progress: # Has a counter that increments each epoch
@@ -18,15 +19,22 @@ def train_vae(model, dataloader, nepochs=100, inter_epoch  = True, regularize = 
                 optimizer.zero_grad()
                 x_hat = model(data)
                 term1 = ((data - x_hat)**2).mean()
-                term2 = model.kl
-                loss = term1 + 1e-5*term2  
+                term2 = model.kl * 1e-5
+                scaling = -1
+                if scale_KL:
+                    percentdone = batch_idx/len(dataloader)
+                    magnitude = 6
+                    scaling = math.pow(10, percentdone * magnitude) # exponential interval [lr*10^-m, lr]
+                    base = lr * math.pow(10, magnitude*-1)
+                    term2 = base * scaling
+                loss = term1 + term2
                 loss.backward()
                 train_loss += loss.item()
                 optimizer.step()
                 batches.set_description(f"Batch [{batch_idx+1}/{len(dataloader)}]")
-                batches.set_postfix(Loss = loss.item())
+                batches.set_postfix(KL_Scaled = term2, KL_Raw = model.kl.item(), Reconstruction_Loss = term1.item())
             progress.set_description(f"Epoch [{epoch+1}/{nepochs}]")
-            progress.set_postfix(Loss = loss.item())
+            progress.set_postfix(KL_Raw = model.kl.item(), Reconstruction_Loss = term1.item())
     except KeyboardInterrupt:
         print('Exited from training early')
         
