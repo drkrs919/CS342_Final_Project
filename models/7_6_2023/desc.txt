@@ -19,4 +19,8 @@ pretraining:
     top row very light and blurry
     gets darker and slightly clearer for middle and bottom rows
 finetuning:
-    TBD
+    Shading as described above
+    Reconstruction higher quality than ex nihilo generation
+    
+NEXT STEPS
+Determine how to implement color/rid of 3x3 grid

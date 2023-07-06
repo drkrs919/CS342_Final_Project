@@ -1,9 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
 import torch.nn as nn
-import cv2
-import numpy as np
-import pickle
 from processpics import crop_size, image_size
 
 class VAE(nn.Module):
