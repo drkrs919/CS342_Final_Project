@@ -1,0 +1,22 @@
+HYPERPARAMS
+16 latent dims
+64 hidden nodes
+Conv model
+
+TRAINING STATS
+1 epoch of pretraining
+64 epochs of fine tuning
+163m pretraining, 86m fine tuning on desktop
+0.044 loss on last epoch, would fluctuate below 
+regularization off
+
+OTHER NOTES
+new KL divergence formulation
+using exponential KL divergence scaling
+
+OUTPUT
+pretraining:
+    top row very light and blurry
+    gets darker and slightly clearer for middle and bottom rows
+finetuning:
+    TBD

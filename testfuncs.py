@@ -41,8 +41,6 @@ def compare_outputs(model, pretrain = True, gray = False):
     plt.imshow(imgnp)
     plt.matshow(out.squeeze().detach().reshape((crop_size[0], crop_size[1], -1)))
 
-def save_model(model, name = 'model.pkl'):
-    pickle.dump(model, open(name, 'wb'))
 
 def compare_and_gen(model):
     compare_outputs(model, pretrain = False)
