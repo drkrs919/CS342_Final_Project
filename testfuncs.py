@@ -15,7 +15,7 @@ def test_noise_generation(nodes = 64, gray = False):
     if gray:
         image_path = f'./lfwdatagray/Faces/image_{i}.jpg'
     imgnp = cv2.imread(image_path)
-    if imgnp == None:
+    if imgnp is None:
         test_noise_generation(nodes = nodes, gray = gray)
     else:
         imgnp = cv2.cvtColor(imgnp, cv2.COLOR_BGR2RGB)
@@ -38,8 +38,7 @@ def compare_outputs(model, pretrain = True, gray = False):
         if gray:
             image_path = f'./profdatagray/Faces/image_{i}.jpg'
     imgnp = cv2.imread(image_path)
-    if imgnp == None:
-        print('invalid path')
+    if imgnp is None:
         compare_outputs(model, pretrain = pretrain, gray = gray)
     else:
         imgnp = cv2.cvtColor(imgnp, cv2.COLOR_BGR2RGB)
