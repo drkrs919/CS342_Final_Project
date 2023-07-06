@@ -1,16 +1,3 @@
-HYPERPARAMS
-16 latent dims
-64 hidden nodes
-Conv model
-
-TRAINING STATS
-1 epoch of pretraining
-Roughly 3.5 hours on laptop
-0.07 loss give or take
-regularization on
-
-OTHER NOTES
-new KL divergence formulation
-
-OUTPUT
-outputs nothing but grey
+version https://git-lfs.github.com/spec/v1
+oid sha256:edce6f5d36eed8b9c01fcde7fcf7072bf33ffedb7a2c0162f2088dbf2e41c800
+size 238
