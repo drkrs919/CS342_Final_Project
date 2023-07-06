@@ -1,0 +1,2 @@
+https://avandekleut.github.io/vae/                  Reference for implemented code
+https://statproofbook.github.io/P/norm-kl.html      KL Divergence proof for normal distributions
