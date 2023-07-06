@@ -12,9 +12,12 @@ def train_vae(model, dataloader, nepochs=100, lr = 1e-3, scale_KL  = True, regul
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     try:
         progress = tqdm(range(nepochs), position = 0, unit = "epoch")
+        shortepoch = len(dataloader) <= 10
         for epoch in progress: # Has a counter that increments each epoch
             train_loss = 0
-            batches = tqdm(dataloader, position = 1, unit = "batch", leave = False)
+            batches = dataloader
+            if not shortepoch:
+                batches = tqdm(dataloader, position = 1, unit = "batch", leave = False)
             for batch_idx, (data, _) in enumerate(batches):
                 optimizer.zero_grad()
                 x_hat = model(data)
@@ -31,8 +34,9 @@ def train_vae(model, dataloader, nepochs=100, lr = 1e-3, scale_KL  = True, regul
                 loss.backward()
                 train_loss += loss.item()
                 optimizer.step()
-                batches.set_description(f"Batch [{batch_idx+1}/{len(dataloader)}]")
-                batches.set_postfix(KL_Scaled = term2, KL_Raw = model.kl.item(), Reconstruction_Loss = term1.item())
+                if not shortepoch:
+                    batches.set_description(f"Batch [{batch_idx+1}/{len(dataloader)}]")
+                    batches.set_postfix(KL_Scaled = term2, KL_Raw = model.kl.item(), Reconstruction_Loss = term1.item())
             progress.set_description(f"Epoch [{epoch+1}/{nepochs}]")
             progress.set_postfix(KL_Raw = model.kl.item(), Reconstruction_Loss = term1.item())
     except KeyboardInterrupt:
