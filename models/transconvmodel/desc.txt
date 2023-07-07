@@ -1,0 +1,28 @@
+HYPERPARAMS
+16 latent dims
+64 hidden nodes
+Transposed Convolution model
+
+TRAINING STATS
+1 epoch of pretraining
+64 epochs of fine tuning
+12m pretraining, 5m fine tuning on desktop
+0.03 loss on last epoch, would fluctuate below 
+regularization off
+
+OTHER NOTES
+Using first attempt at a transposed convolutional model
+
+OUTPUT
+pretraining:
+    top row very light
+    gets darker for middle and bottom rows
+    rough shape of face, but overall still in a grid and blocky
+finetuning:
+    shading gone, now simply black/white with no grey
+    top row has shaded eye hollows, left cheek
+    lower rows have more shading, only top right of forehead, nose, and background are white
+    
+NEXT STEPS
+See effects of more training
+Determine how to implement color/rid of 3x3 grid
