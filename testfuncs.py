@@ -1,4 +1,4 @@
-from netclasses import VAE
+from netclasses import VAEConv
 import cv2
 import matplotlib.pyplot as plt
 import torch
@@ -9,7 +9,7 @@ from processpics import crop_size
 def test_model(model = None, pretrain = True, gray = False):
     usemodel = model
     if usemodel == None:
-        usemodel = VAE(5, 32)
+        usemodel = VAEConv(5, 32)
     image_path = None
     if pretrain:
         i = np.random.choice(13234)
