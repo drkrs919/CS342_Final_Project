@@ -59,3 +59,9 @@ class VAEConv(nn.Module):
         plt.matshow(x_hat.squeeze().detach().reshape((crop_size[0], crop_size[1], -1)))
         return x_hat
     
+class VAEConvTranspose(nn.Module):
+    def __init__(self, latent_dims, hidden_nodes):
+        pass
+
+    def forward(self, x):
+        pass
