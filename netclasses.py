@@ -63,13 +63,15 @@ class ConvTVAE(nn.Module):
     def __init__(self, latent_dims, hidden_nodes):
         super().__init__()
 
-        prehidden = 1600
+        prehidden = 115200
 
         # Encoding
-        self.conv1  = nn.Conv2d(in_channels = 3, out_channels = 8, kernel_size = (32,32), stride = 8, padding = 2)
-        self.pool1 = nn.MaxPool2d(kernel_size = (4,4), stride = 2)
-        self.conv2 = nn.Conv2d(in_channels = 8, out_channels = 16, kernel_size = (7,7), stride = 2)
-        self.pool2 = nn.MaxPool2d(kernel_size = (3,3), stride = 1)
+        self.conv1  = nn.Conv2d(in_channels = 3, out_channels = 8, kernel_size = (5,5))
+        self.pool1 = nn.MaxPool2d(kernel_size = (2,2), stride = 2)
+        self.conv2 = nn.Conv2d(in_channels = 8, out_channels = 16, kernel_size = (3,3))
+        self.pool2 = nn.MaxPool2d(kernel_size = (2,2), stride = 2)
+        self.conv3 = nn.Conv2d(in_channels = 16, out_channels = 32, kernel_size = (3,3))
+        self.pool3 = nn.MaxPool2d(kernel_size = (2,2), stride = 2)
         self.downtohidden = nn.Linear(prehidden, hidden_nodes)
 
         # Variational Part                  
@@ -79,9 +81,10 @@ class ConvTVAE(nn.Module):
         # Decoding
         self.uptohidden = torch.nn.Linear(latent_dims, hidden_nodes)
         self.prereshape = torch.nn.Linear(hidden_nodes, prehidden)
-        self.convt1 = nn.ConvTranspose2d(in_channels = 16, out_channels = 8, kernel_size = (5,5), stride = 3)
-        self.convt2 = nn.ConvTranspose2d(in_channels = 8, out_channels = 4, kernel_size = (8,8), stride = 4)
-        self.convt3 = nn.ConvTranspose2d(in_channels = 4, out_channels = 3, kernel_size = (10,10), stride = 4, padding = 17)
+        self.convt1 = nn.ConvTranspose2d(in_channels = 32, out_channels = 16, kernel_size = 3, stride = 2)
+        self.convt2 = nn.ConvTranspose2d(in_channels = 16, out_channels = 8, kernel_size = 3, stride = 2)
+        self.convt3 = nn.ConvTranspose2d(in_channels = 8, out_channels = 4, kernel_size = 3, stride = 2)
+        self.convt4 = nn.ConvTranspose2d(in_channels = 4, out_channels = 3, kernel_size = 3, stride = 2)
 
         # Other data
         self.N = torch.distributions.Normal(0, 1)
@@ -91,12 +94,16 @@ class ConvTVAE(nn.Module):
     def forward(self, x):
         relu = torch.nn.ReLU()
         sigmoid = torch.nn.Sigmoid()
+
         # Encoding
         x = self.conv1(x)
         x = relu(self.pool1(x))
         x = self.conv2(x)
-        beforereshape = relu(self.pool2(x))
-        x = torch.flatten(beforereshape, start_dim = 1, end_dim = -1)
+        x = relu(self.pool2(x))
+        x = self.conv3(x)
+        x = relu(self.pool3(x))
+        preflatten = x.shape
+        x = torch.flatten(x, start_dim = 1, end_dim = -1)
         x = relu(self.downtohidden(x))
 
         # Variational part of VAE
@@ -109,7 +116,7 @@ class ConvTVAE(nn.Module):
         #Decoding
         x_hat = relu(self.uptohidden(z))
         x_hat = relu(self.prereshape(x_hat))
-        x_hat = torch.reshape(x_hat, beforereshape.shape)
+        x_hat = torch.reshape(x_hat, preflatten)
 
         # Transposed Convolution
         x_hat = relu(self.convt1(x_hat))
