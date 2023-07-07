@@ -93,17 +93,11 @@ class ConvTVAE(nn.Module):
         sigmoid = torch.nn.Sigmoid()
         # Encoding
         x = self.conv1(x)
-        print(f'first layer, shape is {x.shape}')
         x = relu(self.pool1(x))
-        print(f'after max pooling, shape is {x.shape}')
         x = self.conv2(x)
-        print(f'after second layer, shape is {x.shape}')
         beforereshape = relu(self.pool2(x))
-        print(f'after second max pooling, shape is {beforereshape.shape}')
         x = torch.flatten(beforereshape, start_dim = 1, end_dim = -1)
-        print(f'after flattening, shape is {x.shape}')
         x = relu(self.downtohidden(x))
-        print(f'after compression into hidden nodes, shape is {x.shape}')
 
         # Variational part of VAE
         mu = self.encode_mu(x)
@@ -111,21 +105,14 @@ class ConvTVAE(nn.Module):
         z = mu + sigma_squared * self.N.sample(mu.shape)
         self.kl = 0.5 * (torch.pow(mu, 2) + sigma_squared - torch.log(sigma_squared) - 1).sum()
         assert(not torch.isnan(self.kl).item()) # No items are NaN
-        print(f'after variational part, z shape is {z.shape}')
 
         #Decoding
         x_hat = relu(self.uptohidden(z))
-        print(f'first decoding step, x_hat is shape {x_hat.shape}')
         x_hat = relu(self.prereshape(x_hat))
-        print(f'before reshaping, x_hat is shape {x_hat.shape}')
         x_hat = torch.reshape(x_hat, beforereshape.shape)
-        print(f'after reshaping, x_hat is shape {x_hat.shape}')
 
         # Transposed Convolution
         x_hat = relu(self.convt1(x_hat))
-        print(f'after first cont, x_hat is shape {x_hat.shape}')
         x_hat = relu(self.convt2(x_hat))
-        print(f'after second cont, x_hat is shape {x_hat.shape}')
         x_hat = sigmoid(self.convt3(x_hat))
-        print(f'after third cont, x_hat is shape {x_hat.shape}')
         return x_hat
