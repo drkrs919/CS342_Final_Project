@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import torch
 import numpy as np
 from processpics import crop_size
-
+from timeit import default_timer as timer
 
 def test_model(model = None, pretrain = True, gray = False):
     usemodel = model
@@ -27,11 +27,24 @@ def test_model(model = None, pretrain = True, gray = False):
     else:
         imgnp = cv2.cvtColor(imgnp, cv2.COLOR_BGR2RGB)
         img = torch.reshape(torch.tensor(imgnp, dtype = torch.float32), (1, -1, crop_size[0], crop_size[1]))
+
+        # testimg = img.squeeze().detach().reshape((crop_size[0], crop_size[1], 3)).numpy().astype(int)
+        # plt.imshow(testimg)
+
         out = usemodel(img)
+        outnp = (out.squeeze().detach().reshape((crop_size[0], crop_size[1], 3)).numpy() * 255).astype(int)
         plt.imshow(imgnp)
-        plt.matshow(out.squeeze().detach().reshape((crop_size[0], crop_size[1], -1)))
+        plt.imshow(outnp)
+        return outnp
 
 
 def compare_and_gen(model):
     test_model(model = model, pretrain = False)
     model.generate_face()
+
+def func_runtime(function, name):
+    start = timer()
+    function
+    end = timer()
+    time = end - start
+    print(f"function {name} took {round(time, 2)}s")

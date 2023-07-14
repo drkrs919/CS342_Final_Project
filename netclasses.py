@@ -84,7 +84,7 @@ class ConvTVAE(nn.Module):
         self.convt1 = nn.ConvTranspose2d(in_channels = 32, out_channels = 16, kernel_size = 3, stride = 2)
         self.convt2 = nn.ConvTranspose2d(in_channels = 16, out_channels = 8, kernel_size = 3, stride = 2)
         self.convt3 = nn.ConvTranspose2d(in_channels = 8, out_channels = 4, kernel_size = 3, stride = 2)
-        self.convt4 = nn.ConvTranspose2d(in_channels = 4, out_channels = 3, kernel_size = 3, stride = 2)
+        self.convt4 = nn.ConvTranspose2d(in_channels = 4, out_channels = 3, kernel_size = 14, stride = 1)
 
         # Other data
         self.N = torch.distributions.Normal(0, 1)
@@ -121,5 +121,6 @@ class ConvTVAE(nn.Module):
         # Transposed Convolution
         x_hat = relu(self.convt1(x_hat))
         x_hat = relu(self.convt2(x_hat))
-        x_hat = sigmoid(self.convt3(x_hat))
+        x_hat = relu(self.convt3(x_hat))
+        x_hat = sigmoid(self.convt4(x_hat))
         return x_hat
