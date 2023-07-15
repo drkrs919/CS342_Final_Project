@@ -32,9 +32,9 @@ def test_model(model = None, pretrain = True, gray = False):
         # plt.imshow(testimg)
 
         out = usemodel(img)
-        outnp = (out.squeeze().detach().reshape((crop_size[0], crop_size[1], 3)).numpy() * 255).astype(int)
+        outnp = out.squeeze().detach().reshape((crop_size[0], crop_size[1], 3))
         plt.imshow(imgnp)
-        plt.imshow(outnp)
+        plt.matshow(outnp)
         return outnp
 
 
