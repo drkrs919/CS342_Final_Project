@@ -1,5 +1,5 @@
 import torch
-import math
+import numpy as np
 from tqdm.notebook import tqdm
 
 # Doing in-place allows easier saving via pickle
@@ -21,15 +21,13 @@ def train_vae(model, dataloader, nepochs=100, lr = 1e-3, scale_KL  = True, regul
             for batch_idx, (data, _) in enumerate(batches):
                 optimizer.zero_grad()
                 x_hat = model(data)
-                term1 = ((data - x_hat)**2).mean()
+                term1 = (np.square(data - x_hat)).mean()
                 term2 = model.kl * 1e-5
                 scaling = -1
                 if scale_KL:
                     percentdone = batch_idx/len(dataloader)
-                    magnitude = 6
-                    scaling = math.pow(10, percentdone * magnitude) # exponential interval [lr*10^-m, lr]
-                    base = lr * math.pow(10, magnitude*-1)
-                    term2 = base * scaling
+                    scaling = 0.1
+                    term2 = model.kl * lr * np.square(percentdone) * scaling
                 loss = term1 + term2
                 loss.backward()
                 train_loss += loss.item()
