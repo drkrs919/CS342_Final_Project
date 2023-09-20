@@ -1,2 +1,3 @@
-https://avandekleut.github.io/vae/                  Reference for implemented code
-https://statproofbook.github.io/P/norm-kl.html      KL Divergence proof for normal distributions
+version https://git-lfs.github.com/spec/v1
+oid sha256:773edbbe290c7e44da3d5c868f70c8c9c64416c671a523446ff7661dc88ca985
+size 180
