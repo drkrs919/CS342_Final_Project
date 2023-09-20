@@ -1,0 +1,30 @@
+HYPERPARAMS
+64 latent dims
+256 hidden nodes
+Transposed Convolution model
+
+TRAINING STATS
+2 epoch of pretraining
+128 epochs of fine tuning
+23m pretraining, 11m fine tuning on desktop
+0.0112 loss on last epoch, would fluctuate below 
+regularization off
+
+OTHER NOTES
+Seeing effects of more parameters on transposed convolution model
+
+OUTPUT
+pretraining:
+    3x3 grid
+    blocky and blurry
+    face tilted toward observer's left and down
+    lower rows darker
+    
+finetuning:
+    all black or white
+    most of selection solid white
+    clearly matches edges of input face
+    
+NEXT STEPS
+get rid of 3x3 grid (look into transform for dataloader)
+figure out color

@@ -1,0 +1,18 @@
+HYPERPARAMS
+64 latent dims
+256 hidden nodes
+Transposed Convolution model with extra layers
+
+TRAINING STATS
+1 epoch of pretraining
+64 epochs of fine tuning
+112m pretraining, 53m fine tuning on desktop
+0.0111 loss on last epoch, would fluctuate below 
+regularization off
+
+OTHER NOTES
+Seeing effects of more layers
+
+NEXT STEPS
+get rid of 3x3 grid (look into transform for dataloader)
+figure out color

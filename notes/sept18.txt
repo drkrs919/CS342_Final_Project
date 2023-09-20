@@ -1,0 +1,6 @@
+9/18/2023
+Color exists with tconv approach as of now. After 2 batches, top row is almost white, middle is tv static, lower is almost black.
+Odd how it's still in this 3x3 grid. Something to do with kernel sizes of tconv? Surely not, didn't go away after changing from conv out layers
+Almost as if top is being pushed up super high, low is being pushed down super low, and middle is normal. "border lines" of 3x3 match middle row
+Each third is EXACLY 5/3 of the image. No way that's organic. Was anything that I put in the model a power of 3?
+Seriously has GOT to do with how the training images are being converted to tensors and back.

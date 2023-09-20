@@ -1,0 +1,27 @@
+HYPERPARAMS
+16 latent dims
+64 hidden nodes
+Transposed Convolution model
+
+TRAINING STATS
+2 epoch of pretraining
+128 epochs of fine tuning
+23m pretraining, 10m fine tuning on desktop
+0.016 loss on last epoch, would fluctuate below 
+regularization off
+
+OTHER NOTES
+Seeing effects of longer training on transposed conv model
+
+OUTPUT
+pretraining:
+    shading gone, now simply black/white with no grey
+    top row has shaded eye hollows, lips
+    lower rows have more shading, only forehead, nose, and background are white
+    faced forward as opposed to shorter training model at end of fine tuning
+finetuning:
+    some sort of black and white pattern, doesn't resemble a face
+    
+NEXT STEPS
+get rid of 3x3 grid (look into transform for dataloader)
+figure out color
