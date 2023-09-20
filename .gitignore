@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c4a06ed7a5a487d45980c156e8d89279e928a9f160d527eb97d9e8e2c425b327
-size 37
+*.pkl
+__pycache__
+*.pth
+*.pt
+*.tconv
+.vscode
